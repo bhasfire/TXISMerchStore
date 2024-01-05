@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Dropdown, DropdownButton, Form } from 'react-bootstrap';
+import CartSidebar from './CartSidebar';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]);
+  const [selectedSizes, setSelectedSizes] = useState(new Map());
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -27,6 +30,21 @@ const Home = () => {
     width: '100%', // This ensures the image takes the full width of the card
     height: '300px', // Set a fixed height for all images
     objectFit: 'cover' // This will cover the area, cropping the image if necessary
+  };
+
+  const addToCart = (product) => {
+    // Retrieve the selected size from the map
+    const size = selectedSizes.get(product.id);
+    if (!size) {
+      alert('Please select a size.');
+      return;
+    }
+    const newItem = { ...product, size };
+    setCart(currentCart => [...currentCart, newItem]);
+  };
+
+  const handleSizeChange = (productId, size) => {
+    setSelectedSizes(prevSizes => new Map(prevSizes).set(productId, size));
   };
 
   return (
@@ -63,17 +81,20 @@ const Home = () => {
                     </Card.Text>
                     <form>
                         <Form.Group controlId={`sizeSelect-${product.id}`}>
-                            <Form.Label>Select a size</Form.Label>
-                            <Form.Control as="select" defaultValue="">
-                            <option value="" disabled>Choose...</option>
-                            {product.sm_qty > 0 && <option value="S">S</option>}
-                            {product.md_qty > 0 && <option value="M">M</option>}
-                            {product.lg_qty > 0 && <option value="L">L</option>}
-                            {product.xl_qty > 0 && <option value="XL">XL</option>}
+                            <Form.Control
+                                as="select"
+                                onChange={(e) => handleSizeChange(product.id, e.target.value)}
+                                defaultValue=""
+                                >
+                                <option value="" disabled>Select a size</option>
+                                {product.sm_qty > 0 && <option value="S">Small</option>}
+                                {product.md_qty > 0 && <option value="M">Medium</option>}
+                                {product.lg_qty > 0 && <option value="L">Large</option>}
+                                {product.xl_qty > 0 && <option value="XL">X-Large</option>}
                             </Form.Control>
                         </Form.Group>
                     </form>
-                    <Button variant="primary">Add to Cart</Button>
+                    <Button variant="primary" onClick={() => addToCart(product)}>Add to Cart</Button>
                   </Card.Body>
                 </Card>
               </Col>
@@ -81,6 +102,7 @@ const Home = () => {
           </Row>
         </Col>
       </Row>
+      {cart.length > 0 && <CartSidebar cart={cart} />}
     </Container>
   );
 };
