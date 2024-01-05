@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Dropdown, DropdownButton, Form } from 'react-bootstrap';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -22,6 +22,12 @@ const Home = () => {
 
     fetchProducts();
   }, []);
+
+  const cardImageStyle = {
+    width: '100%', // This ensures the image takes the full width of the card
+    height: '300px', // Set a fixed height for all images
+    objectFit: 'cover' // This will cover the area, cropping the image if necessary
+  };
 
   return (
     <Container>
@@ -47,7 +53,7 @@ const Home = () => {
             {products.map(product => (
               <Col sm={4} key={product.id} className="mb-4">
                 <Card>
-                  <Card.Img variant="top" src={product.imageUrl} />
+                <Card.Img variant="top" src={product.imageUrl} style={cardImageStyle} />
                   <Card.Body>
                     <Card.Title>{product.name}</Card.Title>
                     <Card.Text>
@@ -55,6 +61,18 @@ const Home = () => {
                       <br />
                       <strong>{product.price}</strong>
                     </Card.Text>
+                    <form>
+                        <Form.Group controlId={`sizeSelect-${product.id}`}>
+                            <Form.Label>Select a size</Form.Label>
+                            <Form.Control as="select" defaultValue="">
+                            <option value="" disabled>Choose...</option>
+                            {product.sm_qty > 0 && <option value="S">S</option>}
+                            {product.md_qty > 0 && <option value="M">M</option>}
+                            {product.lg_qty > 0 && <option value="L">L</option>}
+                            {product.xl_qty > 0 && <option value="XL">XL</option>}
+                            </Form.Control>
+                        </Form.Group>
+                    </form>
                     <Button variant="primary">Add to Cart</Button>
                   </Card.Body>
                 </Card>

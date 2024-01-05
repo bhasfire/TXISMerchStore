@@ -40,6 +40,10 @@ app.get('/api/products', async (req, res) => {
         price: row[2],
         description: row[3],
         imageUrl: row[4],
+        sm_qty: row[5],
+        md_qty: row[6],
+        lg_qty: row[7],
+        xl_qty: row[8]
         // ...map other properties...
       }));
       res.json(products);
