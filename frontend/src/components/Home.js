@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Dropdown, DropdownButton, Form } from 'react-bootstrap';
 import CartSidebar from './CartSidebar';
 
-const Home = () => {
+const Home = ({ cart, setCart }) => {
   const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
   const [selectedSizes, setSelectedSizes] = useState(new Map());
+  const [isCartVisible, setIsCartVisible] = useState(false); // New state for cart visibility
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -33,14 +34,31 @@ const Home = () => {
   };
 
   const addToCart = (product) => {
-    // Retrieve the selected size from the map
     const size = selectedSizes.get(product.id);
     if (!size) {
       alert('Please select a size.');
       return;
     }
-    const newItem = { ...product, size };
-    setCart(currentCart => [...currentCart, newItem]);
+  
+    // Check if the item already exists in the cart
+    const existingItem = cart.find(item => item.id === product.id && item.size === size);
+  
+    if (existingItem) {
+      // Increment quantity if item already exists
+      setCart(cart.map(item => 
+        item.id === product.id && item.size === size ? { ...item, quantity: item.quantity + 1 } : item
+      ));
+    } else {
+      // Add new item with quantity 1 if it doesn't exist
+      const newItem = { ...product, size, quantity: 1 };
+      setCart(currentCart => [...currentCart, newItem]);
+    }
+    setIsCartVisible(true);
+  };
+  
+
+  const handleCloseCart = () => {
+    setIsCartVisible(false); // Hide the cart sidebar
   };
 
   const handleSizeChange = (productId, size) => {
@@ -102,7 +120,7 @@ const Home = () => {
           </Row>
         </Col>
       </Row>
-      {cart.length > 0 && <CartSidebar cart={cart} />}
+      {isCartVisible && <CartSidebar cart={cart} onClose={handleCloseCart} />}
     </Container>
   );
 };
