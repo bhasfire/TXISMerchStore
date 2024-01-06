@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Button, Dropdown, DropdownButton, Form } from 'react-bootstrap';
 import CartSidebar from './CartSidebar';
 
@@ -6,6 +7,7 @@ const Home = ({ cart, setCart }) => {
   const [products, setProducts] = useState([]);
   const [selectedSizes, setSelectedSizes] = useState(new Map());
   const [isCartVisible, setIsCartVisible] = useState(false); // New state for cart visibility
+  const navigate = useNavigate(); // Declare navigate function
 
 
   useEffect(() => {
@@ -65,13 +67,22 @@ const Home = ({ cart, setCart }) => {
     setSelectedSizes(prevSizes => new Map(prevSizes).set(productId, size));
   };
 
+  const handleProductClick = (id) => {
+    navigate(`/product/${id}`); // Navigate to the ProductDetail page with the product id
+  };
+
+  const handleAddToCartClick = (e, product) => {
+    e.stopPropagation(); // Prevent the event from bubbling up to the card's onClick handler
+    addToCart(product);
+  };
+
   return (
     <Container>
       <Row className="my-4">
         <Col sm={3}>
           {/* Simple filter section, can be expanded later */}
           <h5>Filter Products</h5>
-          <div>Size</div>
+          <div>Category</div>
           <form>
             {/* Filter checkboxes */}
             {/* Add more filters as needed */}
@@ -88,39 +99,39 @@ const Home = ({ cart, setCart }) => {
             </Col>
             {products.map(product => (
               <Col sm={4} key={product.id} className="mb-4">
-                <Card>
-                <Card.Img variant="top" src={product.imageUrl} style={cardImageStyle} />
-                  <Card.Body>
-                    <Card.Title>{product.name}</Card.Title>
-                    <Card.Text>
-                      {product.description}
-                      <br />
-                      <strong>{product.price}</strong>
-                    </Card.Text>
-                    <form>
-                        <Form.Group controlId={`sizeSelect-${product.id}`}>
-                            <Form.Control
-                                as="select"
-                                onChange={(e) => handleSizeChange(product.id, e.target.value)}
-                                defaultValue=""
-                                >
-                                <option value="" disabled>Select a size</option>
-                                {product.sm_qty > 0 && <option value="S">Small</option>}
-                                {product.md_qty > 0 && <option value="M">Medium</option>}
-                                {product.lg_qty > 0 && <option value="L">Large</option>}
-                                {product.xl_qty > 0 && <option value="XL">X-Large</option>}
-                            </Form.Control>
-                        </Form.Group>
-                    </form>
-                    <Button variant="primary" onClick={() => addToCart(product)}>Add to Cart</Button>
-                  </Card.Body>
-                </Card>
-              </Col>
+              <Card>
+                <Card.Img variant="top" src={product.imageUrl} style={cardImageStyle} onClick={() => handleProductClick(product.id)} />
+                <Card.Body onClick={() => handleProductClick(product.id)}>
+                  <Card.Title>{product.name}</Card.Title>
+                  <Card.Text>
+                    {product.description}
+                    <br />
+                    <strong>{product.price}</strong>
+                  </Card.Text>
+                  <form onClick={e => e.stopPropagation()}> {/* Stop propagation here as well */}
+                    <Form.Group controlId={`sizeSelect-${product.id}`}>
+                      <Form.Control
+                        as="select"
+                        onChange={(e) => handleSizeChange(product.id, e.target.value)}
+                        defaultValue=""
+                      >
+                        <option value="" disabled>Select a size</option>
+                        {product.sm_qty > 0 && <option value="S">Small</option>}
+                        {product.md_qty > 0 && <option value="M">Medium</option>}
+                        {product.lg_qty > 0 && <option value="L">Large</option>}
+                        {product.xl_qty > 0 && <option value="XL">X-Large</option>}
+                      </Form.Control>
+                    </Form.Group>
+                  </form>
+                  <Button variant="primary" onClick={(e) => handleAddToCartClick(e, product)}>Add to Cart</Button>
+                </Card.Body>
+              </Card>
+            </Col>
             ))}
           </Row>
         </Col>
       </Row>
-      {isCartVisible && <CartSidebar cart={cart} onClose={handleCloseCart} />}
+      {isCartVisible && <CartSidebar cart={cart} setCart={setCart} onClose={handleCloseCart} />}
     </Container>
   );
 };

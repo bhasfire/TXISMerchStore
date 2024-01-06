@@ -1,12 +1,20 @@
 import React from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, Nav, Form, FormControl, Button, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap';
+import logo from '../images/txislogo.png'; // Import the logo
 
 const NavBar = () => {
   return (
     <Navbar bg="light" expand="lg">
       <LinkContainer to="/">
-        <Navbar.Brand>Texas Iron Spikes Store</Navbar.Brand>
+        <Navbar.Brand>
+          <img
+            src={logo} // Replace with the path to your logo image
+            alt="TXIS"
+            style={{ width: '30px', height: '30px', marginRight: '10px' }} // Adjust size as needed
+          />
+          Texas Iron Spikes Store
+        </Navbar.Brand>
       </LinkContainer>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">

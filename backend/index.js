@@ -56,6 +56,44 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
+// Route for getting a single product by ID
+app.get('/api/products/:id', async (req, res) => {
+    await authenticateWithGoogle();
+    const productId = req.params.id; // The ID from the URL
+    const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
+    const range = 'Sheet1';
+  
+    try {
+      const response = await sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range,
+      });
+  
+      // Find the product with the given ID
+      const product = response.data.values.slice(1).find(row => row[0] === productId);
+      if (product) {
+        res.json({
+          id: product[0],
+          name: product[1],
+          price: product[2],
+          description: product[3],
+          imageUrl: product[4],
+          sm_qty: product[5],
+          md_qty: product[6],
+          lg_qty: product[7],
+          xl_qty: product[8]
+          // ...map other properties...
+        });
+      } else {
+        res.status(404).send('Product not found');
+      }
+    } catch (err) {
+      console.error('The API returned an error:', err);
+      res.status(500).send('Error occurred while fetching product details');
+    }
+  });
+    
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

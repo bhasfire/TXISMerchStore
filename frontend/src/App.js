@@ -18,7 +18,7 @@ function App() {
       <NavBar cart={cart} />
       <Routes>
         <Route path="/" element={<Home setCart={setCart} cart={cart} />} exact />
-        <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/product/:id" element={<ProductDetail cart={cart} setCart={setCart} />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/cart" element={<Checkout cart={cart} setCart={setCart} />} />

@@ -20,20 +20,22 @@ const Checkout = ({ cart, setCart }) => {
     };
 
     return (
-    <div>
-      <h2>Checkout</h2>
-      {cart.map((item, index) => (
-        <div key={index}>
-          <h5>{item.name}</h5>
-          <p>Size: {item.size} - Price: {item.price}</p>
-          <button onClick={() => incrementQuantity(item.id, item.size)}>+</button>
-          <button onClick={() => decrementQuantity(item.id, item.size)}>-</button>
-          <button onClick={() => removeFromCart(item.id, item.size)}>Remove</button>
+        <div>
+          <h2>Checkout</h2>
+          {cart.map((item, index) => (
+            <div key={index}>
+              <img src={item.imageUrl} alt={item.name} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
+              <h5>{item.name}</h5>
+              <p>Size: {item.size} - Price: {item.price} - Quantity: {item.quantity}</p>
+              <button onClick={() => incrementQuantity(item.id, item.size)}>+</button>
+              <span> {item.quantity} </span>
+              <button onClick={() => decrementQuantity(item.id, item.size)}>-</button>
+              <button onClick={() => removeFromCart(item.id, item.size)}>Remove</button>
+            </div>
+          ))}
+          {/* Add more checkout functionality here */}
         </div>
-      ))}
-      {/* Add more checkout functionality here */}
-    </div>
-  );
+    );
 };
 
 export default Checkout;
