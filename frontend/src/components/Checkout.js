@@ -1,5 +1,6 @@
 // Checkout.js
-import React from 'react';
+import React, { useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const CheckoutContainer = styled.div`
@@ -21,7 +22,51 @@ const CheckoutForm = styled.form`
 `;
 
 const Checkout = ({ cart, setCart }) => {
-    const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    const navigate = useNavigate();
+    const [customerName, setCustomerName] = useState('');
+    const [customerEmail, setCustomerEmail] = useState('');
+    const [customerPhone, setCustomerPhone] = useState('');
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const orderData = {
+            customerName,
+            products: cart.map(item => ({ ...item, price: item.price.replace('$', '') })),
+            subtotal: subtotal.toFixed(2)
+        };
+
+        console.log('Submitting order:', orderData); // Log the order being submitted
+    
+        try {
+            const response = await fetch('http://localhost:3001/api/submit-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData),
+            });
+    
+            if (response.ok) {
+                console.log('Order submitted successfully');
+                // You might want to clear the cart or redirect the user to a confirmation page
+                setCart([]); // Clear the cart
+                navigate('/confirmation'); // Redirect to the confirmation page
+            } else {
+                // Handle server errors
+                console.error('Server responded with a non-OK status:', response.status);
+            }
+        } catch (error) {
+            // Handle network errors
+            console.error('Error occurred during the fetch operation:', error);
+        }
+    };
+    
+
+    const subtotal = cart.reduce((total, item) => {
+        const itemPrice = Number(item.price.replace('$', ''));
+        const itemQuantity = Number(item.quantity);
+        return total + (itemPrice * itemQuantity);
+    }, 0);
 
     const incrementQuantity = (id, size) => {
         setCart(cart.map(item =>
@@ -43,21 +88,36 @@ const Checkout = ({ cart, setCart }) => {
         <CheckoutContainer>
           
           <FormColumn>
-            <CheckoutForm>
-              <h3>Customer Details</h3>
-              <div>
-                <label>Name:</label>
-                <input type="text" placeholder="Enter your name" />
-              </div>
-              <div>
-                <label>Email:</label>
-                <input type="email" placeholder="Enter your email" />
-              </div>
-              <div>
-                <label>Phone Number:</label>
-                <input type="tel" placeholder="Enter your phone number" />
-              </div>
-              <button type="submit">Submit</button>
+            <CheckoutForm onSubmit={handleSubmit}>
+                <h3>Customer Details</h3>
+                <div>
+                    <label>Name:</label>
+                    <input 
+                        type="text" 
+                        placeholder="Enter your name" 
+                        value={customerName} 
+                        onChange={(e) => setCustomerName(e.target.value)} 
+                    />
+                </div>
+                <div>
+                    <label>Email:</label>
+                    <input 
+                        type="email" 
+                        placeholder="Enter your email" 
+                        value={customerEmail} 
+                        onChange={(e) => setCustomerEmail(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <label>Phone Number:</label>
+                    <input 
+                        type="tel" 
+                        placeholder="Enter your phone number" 
+                        value={customerPhone} 
+                        onChange={(e) => setCustomerPhone(e.target.value)}
+                    />
+                </div>
+                <button type="submit">Submit</button>
             </CheckoutForm>
           </FormColumn>
 
@@ -67,7 +127,11 @@ const Checkout = ({ cart, setCart }) => {
               <div key={index}>
                 <img src={item.imageUrl} alt={item.name} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
                 <h5>{item.name}</h5>
-                <p>Size: {item.size} - Price: {item.price} - Quantity: {item.quantity}</p>
+                <p>
+                    Size: {item.size} <br />
+                    Price: {item.price} <br />
+                    Quantity: {item.quantity}
+                </p>
                 {/* Uncomment below buttons if you need to modify quantity in checkout page */}
                 <button onClick={() => incrementQuantity(item.id, item.size)}>+</button>
                 <span> {item.quantity} </span>
@@ -75,7 +139,7 @@ const Checkout = ({ cart, setCart }) => {
                 <button onClick={() => removeFromCart(item.id, item.size)}>Remove</button>
               </div>
             ))}
-            <p>Subtotal: ${subtotal.toFixed(2)}</p> {/* Display subtotal */}
+            <h3>Subtotal: ${subtotal.toFixed(2)}</h3> {/* Display subtotal */}
           </CartColumn>
         </CheckoutContainer>
       );

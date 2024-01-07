@@ -4,9 +4,11 @@ const express = require('express');
 const cors = require('cors');
 const { google } = require('googleapis');
 const sheets = google.sheets('v4');
+const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 app.use(cors()); // Use CORS to allow requests from your React app
+app.use(express.json()); // This line is added to parse JSON body
 const port = process.env.PORT || 3001;
 
 async function authenticateWithGoogle() {
@@ -94,6 +96,47 @@ app.get('/api/products/:id', async (req, res) => {
   });
     
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+
+// handle checkouts 
+app.post('/api/submit-order', async (req, res) => {
+    console.log('Submitting order:', req.body); // Log the order data
+
+    await authenticateWithGoogle();
+    const orderData = req.body; // Get order data from request body
+    //console.log('Order data:', orderData); // Log the order data
+
+    const spreadsheetId = '1lf29SnA7bQ3rJrIgbs7lbHm8hJYwD3tCZh3RPEBjHiw'; // Use a different Spreadsheet ID for orders
+
+    // Format the data for Google Sheets
+    const values = [
+        [
+            // Generate unique Order ID (e.g., timestamp or UUID)
+            uuidv4(),
+            orderData.customerName,
+            // Concatenate product details
+            orderData.products.map(p => `${p.id}-${p.name}-${p.size}-${p.quantity}`).join('; '),
+            orderData.products.length,
+            orderData.subtotal,
+            new Date().toLocaleDateString()
+        ],
+    ];
+
+    try {
+        // Append data to Google Sheets
+        await sheets.spreadsheets.values.append({
+            spreadsheetId,
+            range: 'Sheet1!A:F', // Assuming 'Orders' is your sheet name
+            valueInputOption: 'USER_ENTERED',
+            resource: { values },
+        });
+        res.send('Order submitted successfully');
+    } catch (err) {
+        console.error('Error submitting order:', err);
+        res.status(500).send('Error occurred while submitting order');
+        console.log('Detailed error:', err.errors); // Detailed error logging
+    }
 });
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });

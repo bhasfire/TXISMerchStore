@@ -130,7 +130,6 @@ const Home = ({ cart, setCart }) => {
             <DropdownButton
                 id="dropdown-basic-button"
                 title="Sort by"
-                alignRight
                 className="mb-3 dropdown-basic-button" // Apply custom class here
                 >
                 <Dropdown.Item href="#/action-1">Best Sellers</Dropdown.Item>

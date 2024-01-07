@@ -22,9 +22,7 @@ const NavBar = ({ cart, toggleCart }) => {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-          <LinkContainer to="/about">
-            <Nav.Link>About</Nav.Link>
-          </LinkContainer>
+          <Nav.Link href="https://txironspikes.com/about" target="_blank" rel="noopener noreferrer">About</Nav.Link>
           <LinkContainer to="/contact">
             <Nav.Link>Contact</Nav.Link>
           </LinkContainer>

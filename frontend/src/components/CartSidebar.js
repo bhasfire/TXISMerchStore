@@ -106,7 +106,11 @@ const CartSidebar = ({ cart, setCart, onClose, isVisible }) => {
                     <img src={item.imageUrl} alt={item.name} />
                     <div>
                     <h5>{item.name}</h5>
-                    <p>Size: {item.size} - Price: {item.price}</p>
+                    <p>
+                        Size: {item.size} <br />
+                        Price: {item.price} <br />
+                        Quantity: {item.quantity}
+                    </p>
                     <button onClick={() => incrementQuantity(item.id, item.size)}>+</button>
                     <span> {item.quantity} </span>
                     <button onClick={() => decrementQuantity(item.id, item.size)}>-</button>
@@ -115,7 +119,7 @@ const CartSidebar = ({ cart, setCart, onClose, isVisible }) => {
                 </CartItem>
                 ))}
             </CartItemsContainer>
-            <p>Subtotal: ${subtotal.toFixed(2)}</p> {/* Display subtotal */}
+            <h3>Subtotal: ${subtotal.toFixed(2)}</h3> {/* Display subtotal */}
             <CheckoutButtonContainer>
                 <Link to="/cart">
                     <button>Go to Checkout</button>

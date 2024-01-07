@@ -10,6 +10,7 @@ import About from './components/About';
 import Contact from './components/Contact';
 import Checkout from './components/Checkout';
 import CartSidebar from './components/CartSidebar';
+import Confirmation from './components/Confirmation.js';
 
 const PageContainer = styled.div`
   min-height: 100vh; /* Minimum height of 100% of the viewport height */
@@ -48,11 +49,12 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/cart" element={<Checkout cart={cart} setCart={setCart} />} />
+            <Route path="/confirmation" element={<Confirmation />} />
             {/* Add more routes as needed */}
           </Routes>
         </ContentWrap>
         <StyledFooter>
-          <p>&copy; {new Date().getFullYear()} TXIS Merch Store</p>
+          <p>&copy; {new Date().getFullYear()} Texas Iron Spikes</p>
           {/* Add more footer content as needed */}
         </StyledFooter>
       </PageContainer>
