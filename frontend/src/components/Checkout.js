@@ -24,8 +24,8 @@ const CheckoutForm = styled.form`
 const Checkout = ({ cart, setCart }) => {
     const navigate = useNavigate();
     const [customerName, setCustomerName] = useState('');
-    const [customerEmail, setCustomerEmail] = useState('');
-    const [customerPhone, setCustomerPhone] = useState('');
+    // const [customerEmail, setCustomerEmail] = useState('');
+    // const [customerPhone, setCustomerPhone] = useState('');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -48,16 +48,16 @@ const Checkout = ({ cart, setCart }) => {
     
             if (response.ok) {
                 console.log('Order submitted successfully');
-                // You might want to clear the cart or redirect the user to a confirmation page
                 setCart([]); // Clear the cart
                 navigate('/confirmation'); // Redirect to the confirmation page
             } else {
-                // Handle server errors
+                const errorText = await response.text();
                 console.error('Server responded with a non-OK status:', response.status);
+                alert(errorText); // Display the server error message to the user
             }
         } catch (error) {
-            // Handle network errors
             console.error('Error occurred during the fetch operation:', error);
+            alert('An error occurred while submitting your order. Please try again.'); // Display a general error message to the user
         }
     };
     
@@ -97,24 +97,6 @@ const Checkout = ({ cart, setCart }) => {
                         placeholder="Enter your name" 
                         value={customerName} 
                         onChange={(e) => setCustomerName(e.target.value)} 
-                    />
-                </div>
-                <div>
-                    <label>Email:</label>
-                    <input 
-                        type="email" 
-                        placeholder="Enter your email" 
-                        value={customerEmail} 
-                        onChange={(e) => setCustomerEmail(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label>Phone Number:</label>
-                    <input 
-                        type="tel" 
-                        placeholder="Enter your phone number" 
-                        value={customerPhone} 
-                        onChange={(e) => setCustomerPhone(e.target.value)}
                     />
                 </div>
                 <button type="submit">Submit</button>

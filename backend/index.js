@@ -21,11 +21,13 @@ async function authenticateWithGoogle() {
   google.options({ auth: client });
 }
 
+// API ROUTES
+
 app.get('/api/products', async (req, res) => {
   await authenticateWithGoogle();
 
   const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID; // Replace with your actual spreadsheet ID
-  const range = 'Sheet1'; // Replace with your actual range
+  const range = 'Inventory'; // Replace with your actual range
 
   try {
     const response = await sheets.spreadsheets.values.get({
@@ -63,7 +65,7 @@ app.get('/api/products/:id', async (req, res) => {
     await authenticateWithGoogle();
     const productId = req.params.id; // The ID from the URL
     const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
-    const range = 'Sheet1';
+    const range = 'Inventory';
   
     try {
       const response = await sheets.spreadsheets.values.get({
@@ -94,48 +96,75 @@ app.get('/api/products/:id', async (req, res) => {
       res.status(500).send('Error occurred while fetching product details');
     }
   });
-    
 
 
-// handle checkouts 
+// // Route to handle checkouts 
 app.post('/api/submit-order', async (req, res) => {
-    console.log('Submitting order:', req.body); // Log the order data
+    console.log('Received order submission:', req.body);
 
     await authenticateWithGoogle();
-    const orderData = req.body; // Get order data from request body
-    //console.log('Order data:', orderData); // Log the order data
+    const orderData = req.body;
+    const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
 
-    const spreadsheetId = '1lf29SnA7bQ3rJrIgbs7lbHm8hJYwD3tCZh3RPEBjHiw'; // Use a different Spreadsheet ID for orders
-
-    // Format the data for Google Sheets
-    const values = [
-        [
-            // Generate unique Order ID (e.g., timestamp or UUID)
-            uuidv4(),
-            orderData.customerName,
-            // Concatenate product details
-            orderData.products.map(p => `${p.id}-${p.name}-${p.size}-${p.quantity}`).join('; '),
-            orderData.products.length,
-            orderData.subtotal,
-            new Date().toLocaleDateString()
-        ],
-    ];
-
+    // Check inventory before processing the order
     try {
-        // Append data to Google Sheets
+        const inventoryRange = 'Inventory!A:I';
+        const inventoryResponse = await sheets.spreadsheets.values.get({ spreadsheetId, range: inventoryRange });
+        const inventoryRows = inventoryResponse.data.values;
+        const totalItems = orderData.products.reduce((total, item) => total + item.quantity, 0);
+
+        for (const item of orderData.products) {
+            const productRow = inventoryRows.find(row => row[0] === item.id);
+            const sizeColumn = { 'S': 5, 'M': 6, 'L': 7, 'XL': 8 }[item.size];
+
+            if (productRow && productRow[sizeColumn] && Number(productRow[sizeColumn]) < item.quantity) {
+                // Insufficient stock for this item
+                return res.status(400).send(`Insufficient stock for item ID ${item.id}, Size ${item.size}. Only ${productRow[sizeColumn]} available.`);
+            }
+        }
+
+        // Process the order as all items have sufficient stock
+        const orderValues = [
+            [
+                uuidv4(),
+                orderData.customerName,
+                orderData.products.map(p => `${p.id}-${p.name}-${p.size}-${p.quantity}`).join('; '),
+                totalItems,
+                orderData.subtotal,
+                new Date().toLocaleDateString()
+            ],
+        ];
+
+        // Append order data to Orders sheet
         await sheets.spreadsheets.values.append({
             spreadsheetId,
-            range: 'Sheet1!A:F', // Assuming 'Orders' is your sheet name
+            range: 'Orders!A:F',
             valueInputOption: 'USER_ENTERED',
-            resource: { values },
+            resource: { values: orderValues },
         });
+
+        // Decrement quantities in Inventory sheet
+        for (const item of orderData.products) {
+            const productRow = inventoryRows.find(row => row[0] === item.id);
+            const sizeColumn = { 'S': 5, 'M': 6, 'L': 7, 'XL': 8 }[item.size];
+            productRow[sizeColumn] = (Number(productRow[sizeColumn]) - item.quantity).toString();
+
+            // Update the product row in Inventory sheet
+            await sheets.spreadsheets.values.update({
+                spreadsheetId,
+                range: `Inventory!A${inventoryRows.indexOf(productRow) + 1}:I${inventoryRows.indexOf(productRow) + 1}`,
+                valueInputOption: 'USER_ENTERED',
+                resource: { values: [productRow] },
+            });
+        }
+
         res.send('Order submitted successfully');
     } catch (err) {
-        console.error('Error submitting order:', err);
-        res.status(500).send('Error occurred while submitting order');
-        console.log('Detailed error:', err.errors); // Detailed error logging
+        console.error('Error processing order:', err);
+        res.status(500).send('Error occurred while processing order');
     }
 });
+
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
