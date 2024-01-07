@@ -3,7 +3,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Form, FormControl, Button, Badge } from 'react-bootstrap';
 import logo from '../images/txislogo.png'; // Import the logo
 
-const NavBar = ({ cart }) => {
+const NavBar = ({ cart, toggleCart }) => {
 
   const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
 
@@ -42,11 +42,9 @@ const NavBar = ({ cart }) => {
           <LinkContainer to="/account">
             <Nav.Link>Account</Nav.Link>
           </LinkContainer>
-          <LinkContainer to="/cart">
-            <Nav.Link>
+            <Nav.Link onClick={toggleCart}> 
               Cart {itemCount > 0 && <Badge bg="secondary">{itemCount}</Badge>} {/* Display the badge only if itemCount is greater than 0 */}
             </Nav.Link>
-          </LinkContainer>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

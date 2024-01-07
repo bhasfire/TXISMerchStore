@@ -26,13 +26,24 @@ const ProductDetail = ({ cart, setCart }) => {
   }, [id]);
 
   const handleAddToCart = () => {
-    const newItem = { ...product, size: selectedSize, quantity: 1 }; // assume quantity 1 for simplicity
-    setCart(currentCart => [...currentCart, newItem]);
-  };
+  // Find if the item with the same id and size already exists
+    const existingItem = cart.find(item => item.id === product.id && item.size === selectedSize);
+    
+    if (existingItem) {
+      // Increment quantity if item already exists
+      setCart(cart.map(item => 
+        item.id === product.id && item.size === selectedSize ? { ...item, quantity: item.quantity + 1 } : item
+      ));
+    } else {
+      // Add new item with quantity 1 if it doesn't exist
+      const newItem = { ...product, size: selectedSize, quantity: 1 };
+      setCart(currentCart => [...currentCart, newItem]);
+    }
+};
 
-  if (!product) {
-    return <div>Loading...</div>;
-  }
+if (!product) {
+  return <div>Loading product details...</div>;
+}
 
   return (
     <Container>

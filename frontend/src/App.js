@@ -9,6 +9,7 @@ import ProductDetail from './components/ProductDetail.js';
 import About from './components/About';
 import Contact from './components/Contact';
 import Checkout from './components/Checkout';
+import CartSidebar from './components/CartSidebar';
 
 const PageContainer = styled.div`
   min-height: 100vh; /* Minimum height of 100% of the viewport height */
@@ -29,10 +30,16 @@ const StyledFooter = styled.footer`
 
 function App() {
   const [cart, setCart] = useState([]);
+  const [isCartVisible, setIsCartVisible] = useState(false); // Add this state
+
+  // Function to toggle cart visibility
+  const toggleCartVisibility = () => {
+    setIsCartVisible(!isCartVisible);
+  };
 
   return (
     <Router>
-      <NavBar cart={cart} />
+      <NavBar cart={cart} toggleCart={toggleCartVisibility} /> {/* Pass the function */}
       <PageContainer>
         <ContentWrap>
           <Routes>
@@ -49,6 +56,7 @@ function App() {
           {/* Add more footer content as needed */}
         </StyledFooter>
       </PageContainer>
+      {isCartVisible && <CartSidebar cart={cart} setCart={setCart} onClose={() => setIsCartVisible(false)} isVisible={isCartVisible} />}
     </Router>
   );
 }

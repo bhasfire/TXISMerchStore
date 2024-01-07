@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -16,6 +16,8 @@ const Sidebar = styled.div`
   overflow-y: auto;
   z-index: 1000;
   padding: 20px;
+//   transition: right 0.3s ease-in-out; // Add this line for transition
+//   right: ${props => props.isVisible ? '0' : '-300px'};
 `;
 
 const CartItemsContainer = styled.div`
@@ -49,26 +51,44 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
-const CartSidebar = ({ cart, setCart, onClose }) => {
-const incrementQuantity = (id, size) => {
-    const updatedCart = cart.map(item =>
-        item.id === id && item.size === size ? { ...item, quantity: item.quantity + 1 } : item
-    );
-    setCart(updatedCart);
+const CartSidebar = ({ cart, setCart, onClose, isVisible }) => {
+    const sidebarRef = useRef();
+
+    const incrementQuantity = (id, size) => {
+        const updatedCart = cart.map(item =>
+            item.id === id && item.size === size ? { ...item, quantity: item.quantity + 1 } : item
+        );
+        setCart(updatedCart);
     };
 
     const decrementQuantity = (id, size) => {
-    setCart(cart.map(item =>
-        item.id === id && item.size === size && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
-    ));
+        setCart(cart.map(item =>
+            item.id === id && item.size === size && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
+        ));
     };
 
     const removeFromCart = (id, size) => {
-    setCart(cart.filter(item => !(item.id === id && item.size === size)));
+        setCart(cart.filter(item => !(item.id === id && item.size === size)));
     };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+                onClose(); // Hide the sidebar
+            }
+        };
+
+        // Add event listener
+        document.addEventListener('mousedown', handleClickOutside);
+
+        // Cleanup function
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [onClose]);
     
     return (
-        <Sidebar>
+        <Sidebar ref={sidebarRef} isVisible={isVisible}>
             <CloseButton onClick={onClose}>&times;</CloseButton>
             <CartItemsContainer>
             <h3>Your Cart</h3>
