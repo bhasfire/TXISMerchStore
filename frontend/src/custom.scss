@@ -1,0 +1,28 @@
+
+// Your variable overrides
+$font-family-base: 'Trebuchet MS', sans-serif;
+
+$theme-colors: (
+  "primary": #0047ab
+  // You can add other color overrides here
+);
+
+.dropdown-basic-button {
+    .btn {
+        border-radius: 0 !important; // To make corners square
+        background-color: #f8f9fa !important; // Very light gray background
+        border: 1px solid #dee2e6 !important; // Optional: if you want to define a border
+        color: #000 !important; // Standard black color for the text
+    }
+
+    .dropdown-toggle {
+        background-color: #f8f9fa !important;
+        border-color: #dee2e6 !important;
+        &:hover,
+        &:focus {
+        background-color: #e2e6ea !important; // Slightly darker gray on hover/focus
+        }
+    }
+}
+
+@import "~bootstrap/scss/bootstrap";

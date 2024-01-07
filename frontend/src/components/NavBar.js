@@ -14,7 +14,7 @@ const NavBar = ({ cart }) => {
           <img
             src={logo} // Replace with the path to your logo image
             alt="TXIS"
-            style={{ width: '30px', height: '30px', marginRight: '10px' }} // Adjust size as needed
+            style={{ width: '75px', height: 'px', marginRight: '10px', marginLeft: '50px' }} // Adjust size as needed
           />
           Texas Iron Spikes Store
         </Navbar.Brand>
