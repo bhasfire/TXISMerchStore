@@ -39,9 +39,9 @@ const NavBar = ({ cart, toggleCart }) => {
           <Button variant="outline-success">Search</Button>
         </Form>
         <Nav>
-          <LinkContainer to="/account">
+          {/* <LinkContainer to="/account">
             <Nav.Link>Account</Nav.Link>
-          </LinkContainer>
+          </LinkContainer> */}
             <Nav.Link onClick={toggleCart}> 
               Cart {itemCount > 0 && <Badge bg="secondary">{itemCount}</Badge>} {/* Display the badge only if itemCount is greater than 0 */}
             </Nav.Link>

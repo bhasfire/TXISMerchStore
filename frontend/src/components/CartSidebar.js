@@ -52,6 +52,15 @@ const CloseButton = styled.button`
 `;
 
 const CartSidebar = ({ cart, setCart, onClose, isVisible }) => {
+    console.log("Cart items:", cart);
+
+    const subtotal = cart.reduce((total, item) => {
+        // Remove the dollar sign and convert to a number
+        const itemPrice = Number(item.price.replace('$', ''));
+        const itemQuantity = Number(item.quantity);
+        return total + (itemPrice * itemQuantity);
+    }, 0);
+
     const sidebarRef = useRef();
 
     const incrementQuantity = (id, size) => {
@@ -106,6 +115,7 @@ const CartSidebar = ({ cart, setCart, onClose, isVisible }) => {
                 </CartItem>
                 ))}
             </CartItemsContainer>
+            <p>Subtotal: ${subtotal.toFixed(2)}</p> {/* Display subtotal */}
             <CheckoutButtonContainer>
                 <Link to="/cart">
                     <button>Go to Checkout</button>
