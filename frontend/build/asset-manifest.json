@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.4fc9a7fe.css",
+    "main.js": "/static/js/main.0e1ff676.js",
+    "static/js/787.9e9f4ffd.chunk.js": "/static/js/787.9e9f4ffd.chunk.js",
+    "static/media/txislogo.png": "/static/media/txislogo.d754e837b0c18f5dfc47.png",
+    "index.html": "/index.html",
+    "main.4fc9a7fe.css.map": "/static/css/main.4fc9a7fe.css.map",
+    "main.0e1ff676.js.map": "/static/js/main.0e1ff676.js.map",
+    "787.9e9f4ffd.chunk.js.map": "/static/js/787.9e9f4ffd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4fc9a7fe.css",
+    "static/js/main.0e1ff676.js"
+  ]
+}

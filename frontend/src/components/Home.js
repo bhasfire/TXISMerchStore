@@ -46,6 +46,7 @@ const Home = ({ cart, setCart }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        // const response = await fetch('https://us-central1-txismerchstore.cloudfunctions.net/app/api/products');
         const response = await fetch('http://localhost:3001/api/products');
         if (response.ok) {
           const data = await response.json();
