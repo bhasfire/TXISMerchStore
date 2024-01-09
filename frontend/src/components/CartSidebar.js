@@ -122,7 +122,7 @@ const CartSidebar = ({ cart, setCart, onClose, isVisible }) => {
             <h3>Subtotal: ${subtotal.toFixed(2)}</h3> {/* Display subtotal */}
             <CheckoutButtonContainer>
                 <Link to="/cart">
-                    <button>Go to Checkout</button>
+                    <button onClick={onClose}>Go to Checkout</button>
                 </Link>
             </CheckoutButtonContainer>
 

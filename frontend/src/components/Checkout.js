@@ -4,17 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const CheckoutContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
 `;
 
 const CartColumn = styled.div`
-  width: 50%;
+    margin-top: 20px;
+    width: 50%;
 `;
 
 const FormColumn = styled.div`
-  width: 50%;
+    margin-top: 20px;
+    width: 50%;
 `;
 
 const CheckoutForm = styled.form`
@@ -24,11 +26,14 @@ const CheckoutForm = styled.form`
 const Checkout = ({ cart, setCart }) => {
     const navigate = useNavigate();
     const [customerName, setCustomerName] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
     // const [customerEmail, setCustomerEmail] = useState('');
     // const [customerPhone, setCustomerPhone] = useState('');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setIsLoading(true); // Start loading
         const orderData = {
             customerName,
             products: cart.map(item => ({ ...item, price: item.price.replace('$', '') })),
@@ -99,7 +104,10 @@ const Checkout = ({ cart, setCart }) => {
                         onChange={(e) => setCustomerName(e.target.value)} 
                     />
                 </div>
-                <button type="submit">Submit</button>
+                <button type="submit" disabled={isLoading}>
+                    {isLoading ? "Processing order..." : "Submit"}
+                </button>
+
             </CheckoutForm>
           </FormColumn>
 
