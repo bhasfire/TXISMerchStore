@@ -33,32 +33,27 @@ function App() {
   const [cart, setCart] = useState([]);
   const [isCartVisible, setIsCartVisible] = useState(false); // Add this state
 
-  // Function to toggle cart visibility
-  const toggleCartVisibility = () => {
-    setIsCartVisible(!isCartVisible);
-  };
-
   return (
     <Router>
-      <NavBar cart={cart} toggleCart={toggleCartVisibility} /> {/* Pass the function */}
+      <NavBar cart={cart} isCartVisible={isCartVisible} setIsCartVisible={setIsCartVisible} />
       <PageContainer>
         <ContentWrap>
           <Routes>
             <Route path="/" element={<Home setCart={setCart} cart={cart} />} exact />
-            <Route path="/product/:id" element={<ProductDetail cart={cart} setCart={setCart} />} />
+            <Route path="/product/:id" element={<ProductDetail cart={cart} setCart={setCart} isCartVisible={isCartVisible} setIsCartVisible={setIsCartVisible} />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/cart" element={<Checkout cart={cart} setCart={setCart} />} />
             <Route path="/confirmation" element={<Confirmation />} />
             {/* Add more routes as needed */}
           </Routes>
+          <CartSidebar cart={cart} setCart={setCart} onClose={() => setIsCartVisible(false)} isVisible={isCartVisible} />
         </ContentWrap>
         <StyledFooter>
           <p>&copy; {new Date().getFullYear()} Texas Iron Spikes</p>
           {/* Add more footer content as needed */}
         </StyledFooter>
       </PageContainer>
-      {isCartVisible && <CartSidebar cart={cart} setCart={setCart} onClose={() => setIsCartVisible(false)} isVisible={isCartVisible} />}
     </Router>
   );
 }

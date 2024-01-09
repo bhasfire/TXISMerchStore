@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, Form, Container, Row, Col, Image } from 'react-bootstrap';
 
-const ProductDetail = ({ cart, setCart }) => {
+const ProductDetail = ({ cart, setCart, isCartVisible, setIsCartVisible }) => {
   let { id } = useParams();
   const [product, setProduct] = useState(null);
   const [selectedSize, setSelectedSize] = useState('');
@@ -39,11 +39,12 @@ const ProductDetail = ({ cart, setCart }) => {
       const newItem = { ...product, size: selectedSize, quantity: 1 };
       setCart(currentCart => [...currentCart, newItem]);
     }
-};
+    setIsCartVisible(true);
+  };
 
-if (!product) {
-  return <div>Loading product details...</div>;
-}
+  if (!product) {
+    return <div>Loading product details...</div>;
+  }
 
   return (
     <Container>

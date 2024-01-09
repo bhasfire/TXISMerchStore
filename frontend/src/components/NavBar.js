@@ -3,9 +3,13 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Form, FormControl, Button, Badge } from 'react-bootstrap';
 import logo from '../images/txislogo.png'; // Import the logo
 
-const NavBar = ({ cart, toggleCart }) => {
+const NavBar = ({ cart, isCartVisible, setIsCartVisible }) => {
 
   const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
+
+  const toggleCart = () => {
+    setIsCartVisible(!isCartVisible);
+  };
 
   return (
     <Navbar bg="light" expand="lg">

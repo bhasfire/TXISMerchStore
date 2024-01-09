@@ -16,8 +16,8 @@ const Sidebar = styled.div`
   overflow-y: auto;
   z-index: 1000;
   padding: 20px;
-//   transition: right 0.3s ease-in-out; // Add this line for transition
-//   right: ${props => props.isVisible ? '0' : '-300px'};
+  transform: translateX(${props => props.isVisible ? '0' : '100%'});
+  transition: transform 0.3s ease-in-out;
 `;
 
 const CartItemsContainer = styled.div`
@@ -87,10 +87,8 @@ const CartSidebar = ({ cart, setCart, onClose, isVisible }) => {
             }
         };
 
-        // Add event listener
         document.addEventListener('mousedown', handleClickOutside);
 
-        // Cleanup function
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
@@ -119,7 +117,7 @@ const CartSidebar = ({ cart, setCart, onClose, isVisible }) => {
                 </CartItem>
                 ))}
             </CartItemsContainer>
-            <h3>Subtotal: ${subtotal.toFixed(2)}</h3> {/* Display subtotal */}
+            <h3>Subtotal: ${subtotal.toFixed(2)}</h3> 
             <CheckoutButtonContainer>
                 <Link to="/cart">
                     <button onClick={onClose}>Go to Checkout</button>
