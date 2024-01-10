@@ -2,6 +2,9 @@
 
 This project is an internal merchandise store for the Texas Iron Spikes organization. It features a simple web application that allows users to browse products, select sizes, and add them to a shopping cart.
 
+![Home Page](thumnail.png)
+
+
 ## Features
 
 - Browse available merchandise
