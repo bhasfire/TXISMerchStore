@@ -1,6 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, Form, Container, Row, Col, Image } from 'react-bootstrap';
+import styled from 'styled-components';
+
+const ImageContainer = styled.div`
+  border: 1px solid #ddd;
+  padding: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  margin-top: 20px;
+`;
+
+const ProductTitle = styled.h1`
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 15px;
+`;
+
+const ProductDescription = styled.p`
+  font-size: 16px;
+  line-height: 1.5;
+  color: #666;
+  margin-bottom: 20px;
+`;
+
+const ProductPrice = styled.h3`
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+`;
+
+const StyledButton = styled(Button)`
+  width: 100%;
+  padding: 10px 0;
+  font-size: 18px;
+  margin-top: 15px;
+`;
+
+const ProductDetailsCol = styled(Col)`
+  margin-top: 20px; // Adjust this value as needed
+`;
+
 
 const ProductDetail = ({ cart, setCart, isCartVisible, setIsCartVisible }) => {
   let { id } = useParams();
@@ -50,13 +91,14 @@ const ProductDetail = ({ cart, setCart, isCartVisible, setIsCartVisible }) => {
     <Container>
       <Row>
         <Col md={6}>
-          {/* Image should take the full width of the column */}
-          <Image src={product.imageUrl} alt={product.name} fluid />
+          <ImageContainer>
+            <Image src={product.imageUrl} alt={product.name} fluid />
+          </ImageContainer>
         </Col>
-        <Col md={6}>
-          <h1>{product.name}</h1>
-          <p>{product.description}</p>
-          <h3>Price: {product.price}</h3>
+        <ProductDetailsCol md={6}>
+          <ProductTitle>{product.name}</ProductTitle>
+          <ProductDescription>{product.description}</ProductDescription>
+          <ProductPrice>Price: {product.price}</ProductPrice>
           <Form.Group controlId="sizeSelect">
             <Form.Label>Select Size</Form.Label>
             <Form.Control as="select" value={selectedSize} onChange={e => setSelectedSize(e.target.value)}>
@@ -67,8 +109,12 @@ const ProductDetail = ({ cart, setCart, isCartVisible, setIsCartVisible }) => {
               {product.xl_qty > 0 && <option value="XL">X-Large</option>}
             </Form.Control>
           </Form.Group>
-          <Button variant="primary" onClick={handleAddToCart} disabled={!selectedSize}>Add to Cart</Button>
-        </Col>
+          {product.sm_qty > 0 || product.md_qty > 0 || product.lg_qty > 0 || product.xl_qty > 0 ? (
+            <StyledButton variant="primary" onClick={(e) => handleAddToCart(e, product)}>Add to Cart</StyledButton>
+          ) : (
+            <StyledButton variant="secondary" disabled>Out of Stock</StyledButton>
+          )}
+        </ProductDetailsCol>
       </Row>
     </Container>
   );

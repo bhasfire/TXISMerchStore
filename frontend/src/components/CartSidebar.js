@@ -16,7 +16,7 @@ const Sidebar = styled.div`
   overflow-y: auto;
   z-index: 1000;
   padding: 20px;
-  transform: translateX(${props => props.isVisible ? '0' : '100%'});
+  transform: translateX(${props => props.$isVisible ? '0' : '100%'});
   transition: transform 0.3s ease-in-out;
 `;
 
@@ -143,7 +143,7 @@ const CartSidebar = ({ cart, setCart, onClose, isVisible }) => {
     }, [onClose]);
     
     return (
-        <Sidebar ref={sidebarRef} isVisible={isVisible}>
+        <Sidebar ref={sidebarRef} $isVisible={isVisible}>
             <CloseButton onClick={onClose}>&times;</CloseButton>
             <CartItemsContainer>
                 <h3>Your Cart</h3>

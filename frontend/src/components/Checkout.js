@@ -3,11 +3,7 @@ import React, { useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-const CheckoutContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-`;
+
 
 const CartColumn = styled.div`
     margin-top: 20px;
@@ -25,6 +21,7 @@ const CartColumn = styled.div`
 
     > div {
         border: 1px solid #eee;
+        display: flex;
         padding: 10px;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -41,6 +38,13 @@ const CartColumn = styled.div`
             border-radius: 4px;
             display: flex;
             margin-right: 10px;
+        }
+
+        .details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-left: 10px; // Space between image and details
         }
 
         h5 {
@@ -90,6 +94,25 @@ const FormColumn = styled.div`
     margin-top: 20px;
     width: 50%;
     padding-left: 20px;
+`;
+
+const CheckoutContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+
+    @media (max-width: 768px) { // Adjust the pixel value as needed
+        flex-direction: column;
+        align-items: center;
+
+        ${FormColumn} {
+            order: 2; // Places the FormColumn below the CartColumn
+        }
+
+        ${CartColumn} {
+            order: 1; // Places the CartColumn above the FormColumn
+        }
+    }
 `;
 
 const CheckoutForm = styled.form`
@@ -221,7 +244,7 @@ const Checkout = ({ cart, setCart }) => {
                         onChange={(e) => setCustomerName(e.target.value)} 
                     />
                 </div>
-                <button type="submit" disabled={isLoading}>
+                <button type="submit" disabled={isLoading || cart.length === 0}>
                     {isLoading ? "Processing order..." : "Submit"}
                 </button>
 
@@ -233,17 +256,20 @@ const Checkout = ({ cart, setCart }) => {
             {cart.map((item, index) => (
               <div key={index}>
                 <img src={item.imageUrl} alt={item.name} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
-                <h5>{item.name}</h5>
-                <p>
-                    Size: {item.size} <br />
-                    Price: {item.price} <br />
-                    Quantity: {item.quantity}
-                </p>
-                {/* Uncomment below buttons if you need to modify quantity in checkout page */}
-                <button onClick={() => incrementQuantity(item.id, item.size)}>+</button>
-                <span> {item.quantity} </span>
-                <button onClick={() => decrementQuantity(item.id, item.size)}>-</button>
-                <button onClick={() => removeFromCart(item.id, item.size)}>Remove</button>
+                <div className="details">
+                    <h5>{item.name}</h5>
+                    <p>
+                        Size: {item.size} <br />
+                        Price: {item.price} <br />
+                        Quantity: {item.quantity}
+                    </p>
+                    <div>
+                        <button onClick={() => incrementQuantity(item.id, item.size)}>+</button>
+                        <span> {item.quantity} </span>
+                        <button onClick={() => decrementQuantity(item.id, item.size)}>-</button>
+                        <button onClick={() => removeFromCart(item.id, item.size)}>Remove</button>
+                    </div>
+              </div>
               </div>
             ))}
             <h3>Subtotal: ${subtotal.toFixed(2)}</h3> {/* Display subtotal */}

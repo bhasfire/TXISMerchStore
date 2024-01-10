@@ -246,7 +246,11 @@ const Home = ({ cart, setCart }) => {
                             {product.xl_qty > 0 && <option value="XL">X-Large</option>}
                           </Form.Control>
                         </FullWidthFormGroup>
-                        <Button className="full-width-btn" variant="primary" onClick={(e) => handleAddToCartClick(e, product)}>Add to Cart</Button>
+                        {product.sm_qty > 0 || product.md_qty > 0 || product.lg_qty > 0 || product.xl_qty > 0 ? (
+                            <Button className="full-width-btn" variant="primary" onClick={(e) => handleAddToCartClick(e, product)}>Add to Cart</Button>
+                        ) : (
+                            <Button className="full-width-btn" variant="secondary" disabled>Out of Stock</Button>
+                        )}
                       </form>
                     </StyledCardBody>
                   </StyledCard>

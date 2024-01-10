@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import NavBar from './components/NavBar';
 import Home from './components/Home';
 import ProductDetail from './components/ProductDetail.js';
-import About from './components/About';
 import Contact from './components/Contact';
 import Checkout from './components/Checkout';
 import CartSidebar from './components/CartSidebar';
@@ -41,7 +40,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home setCart={setCart} cart={cart} />} exact />
             <Route path="/product/:id" element={<ProductDetail cart={cart} setCart={setCart} isCartVisible={isCartVisible} setIsCartVisible={setIsCartVisible} />} />
-            <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/cart" element={<Checkout cart={cart} setCart={setCart} />} />
             <Route path="/confirmation" element={<Confirmation />} />
