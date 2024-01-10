@@ -2,7 +2,7 @@
 
 ![Home Page](thumbnail.png)
 
-This project is an e-commerce store for the [Texas Iron Spikes organization](https://txironspikes.com/). Users can browse products, select sizes, and add them to a shopping cart, and checkout items. Internal use has been designed to allow easy inventory and order management.
+This project is an e-commerce apparel store for the [Texas Iron Spikes organization](https://txironspikes.com/). Users can browse products, select sizes, add them to a shopping cart, and checkout items. Internal use has been designed to allow easy inventory and order management.
 
 ## Tech Stack
 
