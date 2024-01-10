@@ -1,24 +1,15 @@
-# Texas Iron Spikes Merchandise Store
+# [Texas Iron Spikes Merchandise Store](https://txmerchstore.web.app)
 
-This project is an internal merchandise store for the Texas Iron Spikes organization. It features a simple web application that allows users to browse products, select sizes, and add them to a shopping cart.
+![Home Page](thumbnail.png)
 
-![Home Page](thumnail.png)
-
-
-## Features
-
-- Browse available merchandise
-- Filter products by size
-- Add products to the shopping cart with size selection
-- View cart and selected items
+This project is a e-commerce store for the Texas Iron Spikes organization. Users can browse products, select sizes, and add them to a shopping cart, and checkout items. Internal use has been designed to allow easy inventory and order management.
 
 ## Tech Stack
 
-- **Frontend:** React, React Bootstrap
+- **Frontend:** React, React Bootstrap, Styled-Components
 - **Backend:** Node.js, Express.js
 - **Database:** Google Sheets API
-- **Authentication:** Firebase (planned)
-- **Hosting:** Firebase Hosting (planned)
+- **Hosting:** Firebase Hosting and Firebase Functions
 
 ## Project Structure
 
@@ -52,10 +43,6 @@ To configure the application for your use:
 ## Contributing
 
 We welcome contributions to the Texas Iron Spikes Merchandise Store. Please read our contribution guidelines before submitting a pull request.
-
-## Contact
-
-For any additional questions or comments, please contact the Texas Iron Spikes organization directly.
 
 ---
 
