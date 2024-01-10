@@ -26,7 +26,7 @@ const NavBar = ({ cart, isCartVisible, setIsCartVisible }) => {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-          <Nav.Link as="a" href="https://txironspikes.com/about" target="_blank" rel="noopener noreferrer">About</Nav.Link>
+        <a href="https://txironspikes.com/about" target="_blank" rel="noopener noreferrer" className="nav-link">About</a>
           <LinkContainer to="/contact">
             <Nav.Link>Contact</Nav.Link>
           </LinkContainer>

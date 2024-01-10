@@ -64,8 +64,7 @@ const CartColumn = styled.div`
             margin-right: 5px;
             border: none;
             border-radius: 4px;
-            background-color: #007bff;
-            color: white;
+            color: black;
             cursor: pointer;
             transition: background-color 0.2s;
 
@@ -74,7 +73,6 @@ const CartColumn = styled.div`
             }
 
             &:last-child {
-                background-color: #dc3545;
 
                 &:hover {
                     background-color: #c82333;
