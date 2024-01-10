@@ -75,6 +75,8 @@ const Home = ({ cart, setCart }) => {
       setIsLoading(true);
       try {
         const response = await fetch('http://localhost:3001/api/products');
+        // const response = await fetch('https://us-central1-txismerchstore.cloudfunctions.net/app/api/products');
+
         if (response.ok) {
           const data = await response.json();
           setProducts(data);

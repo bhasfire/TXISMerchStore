@@ -51,7 +51,8 @@ app.get('/api/products', async (req, res) => {
         sm_qty: row[5],
         md_qty: row[6],
         lg_qty: row[7],
-        xl_qty: row[8]
+        xl_qty: row[8],
+        category: row[9]
         // ...map other properties...
       }));
       res.json(products);

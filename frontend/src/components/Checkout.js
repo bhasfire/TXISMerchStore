@@ -12,15 +12,132 @@ const CheckoutContainer = styled.div`
 const CartColumn = styled.div`
     margin-top: 20px;
     width: 50%;
+    border-right: 1px solid #ddd; // Divider
+    padding-right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    h2 {
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    > div {
+        border: 1px solid #eee;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: box-shadow 0.3s;
+
+        &:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+            display: flex;
+            margin-right: 10px;
+        }
+
+        h5 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+
+            &:hover {
+                background-color: #0056b3;
+            }
+
+            &:last-child {
+                background-color: #dc3545;
+
+                &:hover {
+                    background-color: #c82333;
+                }
+            }
+        }
+    }
+
+    h3 {
+        align-self: flex-left;
+        font-weight: bold;
+        color: #333;
+    }
 `;
 
 const FormColumn = styled.div`
     margin-top: 20px;
     width: 50%;
+    padding-left: 20px;
 `;
 
 const CheckoutForm = styled.form`
-  // Style your form here
+    // border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    h3 {
+        margin-bottom: 10px;
+    }
+
+    div {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        width: 50%;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    input {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    button {
+        padding: 10px 20px;
+        width: 50%;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        &:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        &:hover:not(:disabled) {
+            background-color: #0056b3;
+        }
+    }
 `;
 
 const Checkout = ({ cart, setCart }) => {

@@ -22,22 +22,70 @@ const Sidebar = styled.div`
 
 const CartItemsContainer = styled.div`
   overflow-y: auto;
+
 `;
 
 const CheckoutButtonContainer = styled.div`
   padding-top: 20px; // Add some space above the button
+  border-top: 2px solid #dee2e6; // Example border, adjust as needed
+
+  button {
+    background-color: #007bff; // Example button background color, adjust as needed
+    width: 100%;
+    color: white; // Example button text color, adjust as needed
+    border: none;
+    padding: 10px 20px; // Adjust padding as needed
+    margin-bottom: 20px; // Add some space below the button
+    border-radius: 5px; // Rounded corners for the button 
+    font-size: 16px; // Adjust font size as needed
+    cursor: pointer;
+    transition: background-color 0.3s; // Transition for hover effect
+
+    &:hover {
+      background-color: #0056b3; // Darker shade on hover, adjust as needed
+    }
 `;
 
 const CartItem = styled.div`
   margin-bottom: 20px; // Give some space between cart items
   display: flex;
   align-items: center;
+  margin-bottom: 20px; // Add some space between cart items
+  padding-bottom: 20px; // Add some space below the cart items
+  border-bottom: 2px solid #dee2e6; // Example border, adjust as needed
   
   & > img {
-    width: 50px; // Example image size, adjust as needed
-    height: 50px; // Keep the aspect ratio
+    width: 100x; // Example image size, adjust as needed
+    height: 100px; // Keep the aspect ratio
     object-fit: cover;
     margin-right: 10px; // Space between image and text
+  }
+
+  div {
+    flex-grow: 1;
+  }
+
+  p {
+    font-size: 14px; // Smaller font size for details
+    line-height: 1.5; // Line spacing
+  }
+
+  button {
+    margin-right: 5px; // Space between buttons
+    padding: 5px 10px; // Button padding
+    font-size: 14px; // Button font size
+    border: none;
+    // background-color: #007bff;
+    color: black;
+    border-radius: 5px;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+
+    &:last-child {
+      margin-right: 0; // No right margin for last button
+    }
   }
 `;
 
@@ -47,7 +95,7 @@ const CloseButton = styled.button`
   right: 10px;
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 50px;
   cursor: pointer;
 `;
 
@@ -98,29 +146,33 @@ const CartSidebar = ({ cart, setCart, onClose, isVisible }) => {
         <Sidebar ref={sidebarRef} isVisible={isVisible}>
             <CloseButton onClick={onClose}>&times;</CloseButton>
             <CartItemsContainer>
-            <h3>Your Cart</h3>
-                {cart.map((item, index) => (
-                <CartItem key={index}>
-                    <img src={item.imageUrl} alt={item.name} />
-                    <div>
-                    <h5>{item.name}</h5>
-                    <p>
-                        Size: {item.size} <br />
-                        Price: {item.price} <br />
-                        Quantity: {item.quantity}
-                    </p>
-                    <button onClick={() => incrementQuantity(item.id, item.size)}>+</button>
-                    <span> {item.quantity} </span>
-                    <button onClick={() => decrementQuantity(item.id, item.size)}>-</button>
-                    <button onClick={() => removeFromCart(item.id, item.size)}>Remove</button>
-                    </div>
-                </CartItem>
-                ))}
+                <h3>Your Cart</h3>
+                {cart.length === 0 ? (
+                        <p>Your Cart Is Currently Empty</p> // Display when cart is empty
+                    ) : (
+                    cart.map((item, index) => (
+                        <CartItem key={index}>
+                            <img src={item.imageUrl} alt={item.name} />
+                            <div>
+                                <strong>{item.name}</strong>
+                                <p>
+                                    Size: {item.size} <br />
+                                    Price: {item.price} <br />
+                                    Quantity: {item.quantity}
+                                </p>
+                                <button onClick={() => incrementQuantity(item.id, item.size)}>+</button>
+                                <span> {item.quantity} </span>
+                                <button onClick={() => decrementQuantity(item.id, item.size)}>-</button>
+                                <button onClick={() => removeFromCart(item.id, item.size)}>Remove</button>
+                            </div>
+                        </CartItem>
+                    ))
+                )}
             </CartItemsContainer>
-            <h3>Subtotal: ${subtotal.toFixed(2)}</h3> 
             <CheckoutButtonContainer>
+                <h5>Subtotal: ${subtotal.toFixed(2)}</h5> 
                 <Link to="/cart">
-                    <button onClick={onClose}>Go to Checkout</button>
+                    <button onClick={onClose}>Start Your Checkout</button>
                 </Link>
             </CheckoutButtonContainer>
 

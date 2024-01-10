@@ -40,7 +40,7 @@ const NavBar = ({ cart, isCartVisible, setIsCartVisible }) => {
           />
           <Button variant="outline-success">Search</Button>
         </Form>
-        <Nav>
+        <Nav style = {{marginLeft: '20px', marginRight: '50px'}}>
           {/* <LinkContainer to="/account">
             <Nav.Link>Account</Nav.Link>
           </LinkContainer> */}
