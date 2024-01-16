@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Button, Form, Container, Row, Col, Image } from 'react-bootstrap';
+import { Button, Form, Container, Row, Col } from 'react-bootstrap';
+import ImageCarousel from './ImageCarousel';
 import styled from 'styled-components';
 
 const ImageContainer = styled.div`
@@ -92,7 +93,7 @@ const ProductDetail = ({ cart, setCart, isCartVisible, setIsCartVisible }) => {
       <Row>
         <Col md={6}>
           <ImageContainer>
-            <Image src={product.imageUrl} alt={product.name} fluid />
+            <ImageCarousel imageUrls={product.imageUrls ? product.imageUrls : []} />
           </ImageContainer>
         </Col>
         <ProductDetailsCol md={6}>

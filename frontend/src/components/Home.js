@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Button, Dropdown, DropdownButton, Form } from 'react-bootstrap';
+import ImageCarousel from './ImageCarousel';
 import CartSidebar from './CartSidebar';
 import styled from 'styled-components';
 import bannerImage from '../images/SpikesBanner.png'; // Adjust the path based on your project structure
@@ -134,12 +135,6 @@ const Home = ({ cart, setCart }) => {
     }
   };
 
-  const cardImageStyle = {
-    width: '100%', // This ensures the image takes the full width of the card
-    height: '300px', // Set a fixed height for all images
-    objectFit: 'cover' // This will cover the area, cropping the image if necessary
-  };
-
   const addToCart = (product) => {
     const size = selectedSizes.get(product.id);
     if (!size) {
@@ -181,6 +176,7 @@ const Home = ({ cart, setCart }) => {
     addToCart(product);
   };
 
+
   return (
     <Container>
     <Banner /> {/* This line adds the banner to your page */}
@@ -221,14 +217,21 @@ const Home = ({ cart, setCart }) => {
               </Col>
               {filteredProducts.map(product => (
                 <Col sm={4} key={product.id} className="mb-4">
+                  <div onClick={() => handleProductClick(product.id)}>
+                      <ImageCarousel 
+                          imageUrls={product.imageUrls ? product.imageUrls : []} 
+                          onClick={() => handleProductClick(product.id)} 
+                          context = "home"
+                      />
+                  </div>
+
                   <StyledCard>
-                    <Card.Img variant="top" src={product.imageUrl} style={cardImageStyle} onClick={() => handleProductClick(product.id)} />
                     <StyledCardBody onClick={() => handleProductClick(product.id)}>
+
                       <Card.Title>{product.name}</Card.Title>
                       <Card.Text className="product-description">
                         {product.description}
-                        <br />
-                        <br />
+                        <br /><br />
                         <span className="price-tag">{product.price}</span>
                       </Card.Text>
                       <form onClick={e => e.stopPropagation()}>
@@ -247,9 +250,9 @@ const Home = ({ cart, setCart }) => {
                           </Form.Control>
                         </FullWidthFormGroup>
                         {product.sm_qty > 0 || product.md_qty > 0 || product.lg_qty > 0 || product.xl_qty > 0 ? (
-                            <Button className="full-width-btn" variant="primary" onClick={(e) => handleAddToCartClick(e, product)}>Add to Cart</Button>
+                          <Button className="full-width-btn" variant="primary" onClick={(e) => handleAddToCartClick(e, product)}>Add to Cart</Button>
                         ) : (
-                            <Button className="full-width-btn" variant="secondary" disabled>Out of Stock</Button>
+                          <Button className="full-width-btn" variant="secondary" disabled>Out of Stock</Button>
                         )}
                       </form>
                     </StyledCardBody>

@@ -253,7 +253,11 @@ const Checkout = ({ cart, setCart }) => {
             <h2>Checkout</h2>
             {cart.map((item, index) => (
               <div key={index}>
-                <img src={item.imageUrl} alt={item.name} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
+                <img 
+                    src={Array.isArray(item.imageUrls) ? item.imageUrls[0] : item.imageUrls} 
+                    alt={item.name || 'Product Image'} 
+                    style={{ width: '100px', height: '100px', objectFit: 'cover' }} 
+                />
                 <div className="details">
                     <h5>{item.name}</h5>
                     <p>

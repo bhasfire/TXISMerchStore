@@ -100,7 +100,7 @@ const CloseButton = styled.button`
 `;
 
 const CartSidebar = ({ cart, setCart, onClose, isVisible }) => {
-    console.log("Cart items:", cart);
+    // console.log("Cart items:", cart);
 
     const subtotal = cart.reduce((total, item) => {
         // Remove the dollar sign and convert to a number
@@ -152,7 +152,12 @@ const CartSidebar = ({ cart, setCart, onClose, isVisible }) => {
                     ) : (
                     cart.map((item, index) => (
                         <CartItem key={index}>
-                            <img src={item.imageUrl} alt={item.name} />
+                          <img 
+                            src={Array.isArray(item.imageUrls) 
+                                  ? item.imageUrls[0] 
+                                  : (item.imageUrls && item.imageUrls.split(',')[0])} 
+                            alt={item.name || 'Product Image'}
+                          />
                             <div>
                                 <strong>{item.name}</strong>
                                 <p>

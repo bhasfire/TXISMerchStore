@@ -26,8 +26,8 @@ async function authenticateWithGoogle() {
 app.get('/api/products', async (req, res) => {
   await authenticateWithGoogle();
 
-  const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID; // Replace with your actual spreadsheet ID
-  const range = 'Inventory'; // Replace with your actual range
+  const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
+  const range = 'Inventory';
 
   try {
     const response = await sheets.spreadsheets.values.get({
@@ -37,13 +37,12 @@ app.get('/api/products', async (req, res) => {
 
     const rows = response.data.values;
     if (rows.length) {
-      // Assuming the first row is the header
       const products = rows.slice(1).map((row) => ({
         id: row[0],
         name: row[1],
         price: row[2],
         description: row[3],
-        imageUrl: row[4],
+        imageUrls: row[4].split(',').map(url => url.trim()), // Split the image URLs by comma
         sm_qty: row[5],
         md_qty: row[6],
         lg_qty: row[7],
@@ -82,7 +81,7 @@ app.get('/api/products/:id', async (req, res) => {
           name: product[1],
           price: product[2],
           description: product[3],
-          imageUrl: product[4],
+          imageUrls: product[4].split(',').map(url => url.trim()), // Split by comma and trim spaces
           sm_qty: product[5],
           md_qty: product[6],
           lg_qty: product[7],
