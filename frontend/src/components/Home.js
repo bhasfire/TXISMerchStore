@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Card, Button, Dropdown, DropdownButton, Form } from 'react-bootstrap';
-import ImageCarousel from './ImageCarousel';
+import { Container, Row, Col, Dropdown, DropdownButton, Form } from 'react-bootstrap';
+import ProductItem from './ProductItem';
 import CartSidebar from './CartSidebar';
 import styled from 'styled-components';
 import bannerImage from '../images/SpikesBanner.png'; // Adjust the path based on your project structure
-
-
-const StyledCard = styled(Card)`
-  border: none;
-  box-shadow: none;
-  cursor: pointer; // Change cursor to pointer on hover
-    transition: all 0.2s ease-in-out;
-`;
 
 const Banner = styled.div`
   width: 100%;
@@ -23,41 +15,6 @@ const Banner = styled.div`
   background-repeat: no-repeat;
   rotate: 10deg;
 `;
-
-const StyledCardBody = styled(Card.Body)`
-  padding: 0; // Remove padding to align with the image
-  margin-top: 20px; // Add some space between the image and the text
-
-  .full-width-select, .full-width-btn {
-    width: 100%;
-    border-radius: 0;
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-
-  .product-description {
-    font-size: 14px;
-    min-height: 4.5em; // Adjust this value based on the line height and font size
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-  }
-
-  .price-tag {
-    margin-top: auto; // Pushes the price tag to the bottom of the card body
-    font-weight: bold;
-  }
-`;
-
-const FullWidthFormGroup = styled(Form.Group)`
-  width: 100%;
-  margin: 0; // Remove margin to align with the image
-`;
-
 
 const Home = ({ cart, setCart }) => {
   const [products, setProducts] = useState([]);
@@ -176,12 +133,11 @@ const Home = ({ cart, setCart }) => {
     addToCart(product);
   };
 
-
   return (
     <Container>
-    <Banner /> {/* This line adds the banner to your page */}
+    <Banner /> 
       {isLoading ? (
-        <div>Loading products...</div> // Display loading indicator here
+        <div>Loading products...</div> 
       ) : (
         <Row className="my-4">
           <Col sm={3}>
@@ -216,48 +172,13 @@ const Home = ({ cart, setCart }) => {
                 </DropdownButton>
               </Col>
               {filteredProducts.map(product => (
-                <Col sm={4} key={product.id} className="mb-4">
-                  <div onClick={() => handleProductClick(product.id)}>
-                      <ImageCarousel 
-                          imageUrls={product.imageUrls ? product.imageUrls : []} 
-                          onClick={() => handleProductClick(product.id)} 
-                          context = "home"
-                      />
-                  </div>
-
-                  <StyledCard>
-                    <StyledCardBody onClick={() => handleProductClick(product.id)}>
-
-                      <Card.Title>{product.name}</Card.Title>
-                      <Card.Text className="product-description">
-                        {product.description}
-                        <br /><br />
-                        <span className="price-tag">{product.price}</span>
-                      </Card.Text>
-                      <form onClick={e => e.stopPropagation()}>
-                        <FullWidthFormGroup controlId={`sizeSelect-${product.id}`}>
-                          <Form.Control
-                            as="select"
-                            className="full-width-select"
-                            onChange={(e) => handleSizeChange(product.id, e.target.value)}
-                            defaultValue=""
-                          >
-                            <option value="" disabled>Select a size</option>
-                            {product.sm_qty > 0 && <option value="S">Small</option>}
-                            {product.md_qty > 0 && <option value="M">Medium</option>}
-                            {product.lg_qty > 0 && <option value="L">Large</option>}
-                            {product.xl_qty > 0 && <option value="XL">X-Large</option>}
-                          </Form.Control>
-                        </FullWidthFormGroup>
-                        {product.sm_qty > 0 || product.md_qty > 0 || product.lg_qty > 0 || product.xl_qty > 0 ? (
-                          <Button className="full-width-btn" variant="primary" onClick={(e) => handleAddToCartClick(e, product)}>Add to Cart</Button>
-                        ) : (
-                          <Button className="full-width-btn" variant="secondary" disabled>Out of Stock</Button>
-                        )}
-                      </form>
-                    </StyledCardBody>
-                  </StyledCard>
-                </Col>
+                <ProductItem 
+                  key={product.id}
+                  product={product}
+                  handleProductClick={handleProductClick}
+                  handleSizeChange={handleSizeChange}
+                  handleAddToCartClick={handleAddToCartClick}
+                />
               ))}
             </Row>
           </Col>

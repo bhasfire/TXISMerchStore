@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ImageCarousel = ({ imageUrls, onClick, context }) => {
+const ImageCarousel = ({ imageUrls, onClick, context, className }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
     const handleNext = (e) => {
@@ -27,10 +27,11 @@ const ImageCarousel = ({ imageUrls, onClick, context }) => {
         };
   
     return (
-        <div style={{ position: 'relative' }} onClick={onClick}>
+        <div className={className} style={{ position: 'relative' }} onClick={onClick}>
             <img 
                 src={imageUrls[currentImageIndex]} 
                 alt={''}
+                loading = 'lazy'
                 style={imageStyle}
             />
             {imageUrls.length > 1 && (
